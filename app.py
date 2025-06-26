@@ -1,5 +1,6 @@
 import streamlit as st
 import joblib
+import pandas as pd  # ✅ Tambahan
 from preprocessing import preprocess_input
 
 # Load model
@@ -61,7 +62,14 @@ if submitted:
     }
 
     vector = preprocess_input(input_dict)
-    pred = model.predict([vector])[0]
+
+    input_df = pd.DataFrame([vector], columns=[
+        "HighBP", "HighChol", "CholCheck", "Smoker", "Stroke", "HeartDiseaseorAttack",
+        "PhysActivity", "Fruits", "Veggies", "HvyAlcoholConsump", "AnyHealthcare",
+        "NoDocbcCost", "DiffWalk", "Sex", "BMI", "MentHlth", "PhysHlth", "GenHlth"
+    ])
+
+    pred = model.predict(input_df)[0]
 
     if pred == 1:
         st.error("⚠️ Anda terdeteksi memiliki risiko diabetes.")
